@@ -24,5 +24,38 @@ function [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat)
 %            sig(e) - Stress of bar e
 %--------------------------------------------------------------------------
 
+% Initialize
+ue = zeros(n_d*2,1);
+Re = zeros(2,n_d*2);
+eps = zeros(n_el,1);
+sig = zeros(n_el,1);
+
+% Iterate over all elements
+for i = 1 : n_el
+    % Find length vector components
+    le_vec = x(Tn(i,2),:)-x(Tn(i,1),:);
+    le = norm(le_vec);
+    
+    % Rotation matrix
+    Re(1,1:n_d) = le_vec;
+    Re(2,n_d+1:size(Re,2)) = le_vec;
+
+    % Apply rotation
+    ue = u(Td(i,:));
+    uep = (Re*ue)/le;
+
+    % Find epsilon
+    aux = [-1 1];
+    eps_e = (aux*uep)/le;
+
+    % Find sigma
+    Ee = mat(Tmat(i),1);
+    sig_e = Ee*eps_e;
+
+    % Store values
+    eps(i) = eps_e;
+    sig(i) = sig_e;
+
+end
 
 end

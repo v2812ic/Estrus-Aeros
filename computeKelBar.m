@@ -19,7 +19,7 @@ function Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat)
 %--------------------------------------------------------------------------
 
 Kel = zeros(n_el_dof,n_el_dof,n_el); % This 2 is actually n_nod, which is always 2
-Re = zeros(2, n_d*2); 
+Re = zeros(2,n_d*2); 
 Ke_p = [[1, -1]; [-1, 1]];
 
 for i = 1 : n_el

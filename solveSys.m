@@ -31,7 +31,7 @@ uL = inv(KLL)*(FextL - KLR*uR);
 R = KRR*uR + KRL*uL - FextR;
 
 % Computation of displacements vector
-u = transpose(zeros(1,size(uR,1)+size(uL,1)));
+u = zeros(size(uR,1)+size(uL,1),1);
 u(vL(:)) = uL;
 u(vR(:)) = uR;
 

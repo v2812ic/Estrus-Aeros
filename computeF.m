@@ -13,7 +13,7 @@ function Fext = computeF(n_i,n_dof,Fdata)
 %            Fext(I) - Total external force acting on DOF I
 %--------------------------------------------------------------------------
 
-Fext = transpose(zeros(1, n_dof));
+Fext = zeros(n_dof,1);
 
 for i = 1 : size(Fdata, 1)
     Fext(n_i*(Fdata(i, 1)-1) + Fdata(i, 2)) = Fdata(i, 3);
