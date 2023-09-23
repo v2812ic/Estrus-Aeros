@@ -17,7 +17,7 @@ function [vL,vR,uR] = applyCond(n_i,n_dof,fixNod)
 n_fixdf = size(fixNod, 1);
 
 vR = zeros(1, n_fixdf);
-uR = zeros(1, n_fixdf);
+uR = transpose(zeros(1, n_fixdf));
 
 for i = 1 : n_fixdf
     vR(i) = n_i*(fixNod(i, 1)-1) + fixNod(i, 2);
