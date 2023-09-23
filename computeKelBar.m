@@ -1,4 +1,4 @@
-function Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat)
+function Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_d        Problem's dimensions
@@ -18,8 +18,8 @@ function Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat)
 %            Kel(i,j,e) - Term in (i,j) position of stiffness matrix for element e
 %--------------------------------------------------------------------------
 
-Kel = zeros(2*n_d,2*n_d,n_el);
-Re = zeros(2, n_d*2);
+Kel = zeros(n_el_dof,n_el_dof,n_el); % This 2 is actually n_nod, which is always 2
+Re = zeros(2, n_d*2); 
 Ke_p = [[1, -1]; [-1, 1]];
 
 for i = 1 : n_el

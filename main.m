@@ -6,6 +6,7 @@
 %
 
 clear;
+clc;
 close all;
 
 %% INPUT DATA [SI]
@@ -92,14 +93,14 @@ n_i = n_d;                    % Number of DOFs for each node
 n = size(x,1);                % Total number of nodes
 n_dof = n_i*n;                % Total number of degrees of freedom
 n_el = size(Tn,1);            % Total number of elements (bars)
-n_nod = size(Tn,2);           % Number of nodes for each element
+n_nod = size(Tn,2);           % Number of nodes for each element (always 2)
 n_el_dof = n_i*n_nod;         % Number of DOFs for each element 
 
 % Computation of the DOFs connectivities
-Td = connectDOFs(n_el,n_nod,n_i,Tn);
+Td = connectDOFs(n_el,n_nod,n_i,n_el_dof,Tn);
 
 % Computation of element stiffness matrices
-Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
+Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat);
 
 % Global matrix assembly
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);

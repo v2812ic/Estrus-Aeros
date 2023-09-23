@@ -12,9 +12,11 @@ function Fext = computeF(n_i,n_dof,Fdata)
 %   - Fext  Global force vector [n_dof x 1]
 %            Fext(I) - Total external force acting on DOF I
 %--------------------------------------------------------------------------
-% Hint: Use the relation between the DOFs numbering and nodal numbering to
-% determine at which DOF in the global system each force is applied.
 
+Fext = zeros(1, n_dof);
 
+for i = 1 : size(Fdata, 1)
+    Fext(n_i*(Fdata(i, 1)-1) + Fdata(i, 2)) = Fdata(i, 3);
+end
 
 end

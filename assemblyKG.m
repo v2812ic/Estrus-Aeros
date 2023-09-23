@@ -16,8 +16,8 @@ function KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel)
 
 KG = zeros(n_dof, n_dof);
 
-for i = 1 : n_el % we iterate over the third dimension of the block Kel
-    for j = 1 : n_el_dof % n_i*n_nod, we iterate over the columns of Td
+for i = 1 : n_el % iteration over the third dimension of the block Kel
+    for j = 1 : n_el_dof % n_i*n_nod, iteration over the columns of Td
         for k = 1 : n_el_dof 
             KG(Td(i, j), Td(i, k)) = KG(Td(i, j), Td(i, k)) + Kel(j, k, i);
         end
