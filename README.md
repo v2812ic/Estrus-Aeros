@@ -1,2 +1,2 @@
 # Estrus-Aeros
-Algoritmo de cálculo de estructuras
+Algoritmo del cálculo de estructuras
