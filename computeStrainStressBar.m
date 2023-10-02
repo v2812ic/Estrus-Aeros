@@ -1,4 +1,4 @@
-function [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat)
+function [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T,thermal_coeff)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_d        Problem's dimensions
@@ -16,6 +16,8 @@ function [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat)
 %            mat(m,2) - Section area of material m
 %   - Tmat  Material connectivities table [n_el]
 %            Tmat(e) - Material index of element e
+%   - Delta_T  Temperature increment causing the deformation
+%   - thermal_coeff  Expansion coefficient from thermal causes
 %--------------------------------------------------------------------------
 % It must provide as output:
 %   - eps   Strain vector [n_el x 1]
@@ -29,6 +31,7 @@ ue = zeros(n_d*2,1);
 Re = zeros(2,n_d*2);
 eps = zeros(n_el,1);
 sig = zeros(n_el,1);
+eps_0 = thermal_coeff*Delta_T;
 
 % Iterate over all elements
 for i = 1 : n_el
@@ -46,7 +49,7 @@ for i = 1 : n_el
 
     % Find epsilon
     aux = [-1 1];
-    eps_e = (aux*uep)/le;
+    eps_e = (aux*uep)/le + eps_0;
 
     % Find sigma
     Ee = mat(Tmat(i),1);

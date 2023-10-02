@@ -16,7 +16,7 @@ Young = 7e10; %[Pa]
 Area = 1e-4; %[m^2]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
-
+Delta_T = 20; %[ºCelsius or Kelvin]
 
 %% PREPROCESS
 
@@ -115,7 +115,7 @@ Fext = computeF(n_i,n_dof,Fdata);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
 
 % Compute strain and stresses
-[eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat);
+[eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T,thermal_coeff);
 
 %% POSTPROCESS
 
