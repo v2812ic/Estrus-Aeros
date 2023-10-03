@@ -1,7 +1,8 @@
-function Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat)
+function Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
 %--------------------------------------------------------------------------
 % The function takes as inputs:
-%   - Dimensions:  n_d        Problem's dimensions
+%   - Dimensions:  n_i         Number of DOFs per node
+%                  n_dof       Total number of DOFs
 %                  n_el       Total number of elements
 %   - x     Nodal coordinates matrix [n x n_d]
 %            x(a,i) - Coordinates of node a in the i dimension
@@ -12,26 +13,29 @@ function Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat)
 %            mat(m,2) - Section area of material m
 %   - Tmat  Material connectivities table [n_el]
 %            Tmat(e) - Material index of element e
+%   - Delta_T        Temperature increment causing the deformation
 %--------------------------------------------------------------------------
 % It must provide as output:
-%   - Kel   Elemental stiffness matrices [n_el_dof x n_el_dof x n_el]
-%            Kel(i,j,e) - Term in (i,j) position of stiffness matrix for element e
+%   - Fint_0  Initial stress force vector [n_dof x 1]
+%             Fint_0(I) - Internal force acting on DOF I
 %--------------------------------------------------------------------------
 
-Kel = zeros(n_el_dof,n_el_dof,n_el); 
-Re = zeros(2,n_d*2); 
-Ke_p = [[1, -1]; [-1, 1]];
+Fint_0 = zeros(n_dof,1);
 
+% Create the internal forces due to the thermal elongation
 for i = 1 : n_el
-    Ae = mat(Tmat(i), 2);
-    Ee = mat(Tmat(i), 1);
-    le_vec = x(Tn(i,2),:)-x(Tn(i,1),:);
+    F0_vec = zeros(n_dof,1);
+    % Find the vectors and inverse vector for each element
+    le_vec = transpose(x(Tn(i,2),:)-x(Tn(i,1),:));
     le = norm(le_vec);
-    
-    Re(1,1:n_d) = le_vec;
-    Re(2,n_d+1:size(Re,2)) = le_vec;
-    
-    Kel(:,:,i) = Ae*Ee/(le^3)*transpose(Re)*Ke_p*Re;
+
+    % Force from every element
+    F0 = mat(Tmat(i),2)*mat(Tmat(i),1)*mat(Tmat(i),3)*Delta_T;
+    F0_vec(Tn(i,2)*n_i-n_i+1:Tn(i,2)*n_i,1) = F0*le_vec/le;
+    F0_vec(Tn(i,1)*n_i-n_i+1:Tn(i,1)*n_i,1) = -F0*le_vec/le;
+
+    % Accumulated force
+    Fint_0 = Fint_0 + F0_vec;
 end
 
 end

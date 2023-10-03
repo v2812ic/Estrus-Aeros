@@ -30,7 +30,7 @@ colormap jet;  % Set colormap colors
 % Add axes labels
 xlabel('x (m)')
 ylabel('y (m)')
-title('Displacement');
+title('Desplazamiento');
 
 % Plot undeformed structure
 patch(X0{:},zeros(size(D)),'edgecolor',[0.5,0.5,0.5],'linewidth',2);

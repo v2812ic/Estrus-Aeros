@@ -34,12 +34,12 @@ xlabel('x (m)')
 ylabel('y (m)')
 
 % Add title
-title(sprintf('Deformed structure (scale = %g)',scale));
+title(sprintf('Estructura deformada (escala = %g)',scale));
 
 % Add colorbar
 caxis([min(sig(:)),max(sig(:))]);
 cbar = colorbar;
 set(cbar,'Ticks',linspace(min(sig(:)),max(sig(:)),5));
-title(cbar,{'Stress';'(Pa)'});
+title(cbar,{'Tensión';'(Pa)'});
 
 end

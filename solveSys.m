@@ -16,7 +16,23 @@ function [u,R] = solveSys(vL,vR,uR,KG,Fext)
 %              R(I) - Total reaction acting on global DOF I
 %--------------------------------------------------------------------------
 
+% Shorter matrices creation
+KLL = KG(vL,vL);
+KLR = KG(vL,vR);
+KRL = KG(vR,vL);
+KRR = KG(vR,vR);
 
+% Computation of free and restricted forces
+FextL = Fext(vL);
+FextR = Fext(vR);
 
+% System solver
+uL = inv(KLL)*(FextL - KLR*uR);
+R = KRR*uR + KRL*uL - FextR;
+
+% Computation of displacements vector
+u = zeros(size(uR,1)+size(uL,1),1);
+u(vL) = uL;
+u(vR) = uR;
 
 end

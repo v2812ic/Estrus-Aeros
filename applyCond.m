@@ -13,8 +13,18 @@ function [vL,vR,uR] = applyCond(n_i,n_dof,fixNod)
 %   - vR      Prescribed degree of freedom vector
 %   - uR      Prescribed displacement vector
 %--------------------------------------------------------------------------
-% Hint: Use the relation between the DOFs numbering and nodal numbering to
-% determine at which DOF in the global system each displacement is prescribed.
 
+n_fixdf = size(fixNod, 1);
+
+vR = zeros(1, n_fixdf);
+uR = zeros(n_fixdf,1);
+
+for i = 1 : n_fixdf
+    vR(i) = n_i*(fixNod(i, 1)-1) + fixNod(i, 2);
+    uR(i) = fixNod(i, 3);
+end
+
+v_ndof = 1:n_dof;
+vL = setdiff(v_ndof, vR);
 
 end

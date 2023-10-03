@@ -6,16 +6,17 @@
 %
 
 clear;
+clc;
 close all;
 
 %% INPUT DATA [SI]
 
-F = 800; %[N]
+F = 0.000001; %[N]
 Young = 7e10; %[Pa]
 Area = 1e-4; %[m^2]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
-
+Delta_T = 20; %[ºCelsius or Kelvin]
 
 %% PREPROCESS
 
@@ -68,7 +69,7 @@ Fdata = [[2 2 3*F];
 fixNod = [[1 1 0];
           [1 2 0];
           [5 1 0];
-          [5 2 0]; 
+          [5 2 0];
           ];
       
 
@@ -84,6 +85,7 @@ mat = [% Young M.   Section A.   thermal_coeff   Inertia
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
 Tmat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
+
 %% SOLVER
 
 % Dimensions
@@ -92,20 +94,23 @@ n_i = n_d;                    % Number of DOFs for each node
 n = size(x,1);                % Total number of nodes
 n_dof = n_i*n;                % Total number of degrees of freedom
 n_el = size(Tn,1);            % Total number of elements (bars)
-n_nod = size(Tn,2);           % Number of nodes for each element
+n_nod = size(Tn,2);           % Number of nodes for each element (always 2)
 n_el_dof = n_i*n_nod;         % Number of DOFs for each element 
 
 % Computation of the DOFs connectivities
-Td = connectDOFs(n_el,n_nod,n_i,Tn);
+Td = connectDOFs(n_el,n_nod,n_i,n_el_dof,Tn);
 
 % Computation of element stiffness matrices
-Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
+Kel = computeKelBar(n_d,n_el,n_el_dof,x,Tn,mat,Tmat);
 
 % Global matrix assembly
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
 
+% Initial internal stress force
+Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
+
 % Global force vector assembly
-Fext = computeF(n_i,n_dof,Fdata);
+Fext = computeF(n_i,n_dof,Fdata, Fint_0);
 
 % Apply conditions 
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
@@ -114,7 +119,7 @@ Fext = computeF(n_i,n_dof,Fdata);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
 
 % Compute strain and stresses
-[eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat);
+[eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T);
 
 %% POSTPROCESS
 
@@ -122,10 +127,10 @@ Fext = computeF(n_i,n_dof,Fdata);
 plotDisp(n_d,n,u,x,Tn,1);
 
 % Plot strains
-plotStrainStress(n_d,eps,x,Tn,{'Strain'});
+plotStrainStress(n_d,eps,x,Tn,{'Deformación'});
 
 % Plot stress
-plotStrainStress(n_d,sig,x,Tn,{'Stress';'(Pa)'});
+plotStrainStress(n_d,sig,x,Tn,{'Tensión';'(Pa)'});
 
 % Plot stress in defomed mesh
 plotBarStressDef(x,Tn,u,sig,1)
