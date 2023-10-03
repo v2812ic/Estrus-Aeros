@@ -32,7 +32,6 @@ x = [[0 0];
      [1.5 0.8]
     ];
  
-
 % Connectivities matrix ceation
 %  Tn(e,a) = global nodal number associated to node a of element e
 Tn = [[1 2];
@@ -107,6 +106,12 @@ KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
 
 % Global force vector assembly
 Fext = computeF(n_i,n_dof,Fdata);
+
+% Initial internal stress force
+Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,thermal_coeff,Delta_T);
+
+% Add these two previous forces
+Fext = Fext - Fint_0;
 
 % Apply conditions 
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
