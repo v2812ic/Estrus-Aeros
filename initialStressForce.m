@@ -3,14 +3,22 @@ function Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,thermal_coeff,
 % The function takes as inputs:
 %   - Dimensions:  n_i         Number of DOFs per node
 %                  n_dof       Total number of DOFs
+%                  n_el       Total number of elements
 %   - x     Nodal coordinates matrix [n x n_d]
 %            x(a,i) - Coordinates of node a in the i dimension
 %   - Tn    Nodal connectivities table [n_el x n_nod]
 %            Tn(e,a) - Nodal number associated to node a of element e
+%   - mat   Material properties table [Nmat x NpropertiesXmat]
+%            mat(m,1) - Young modulus of material m
+%            mat(m,2) - Section area of material m
+%   - Tmat  Material connectivities table [n_el]
+%            Tmat(e) - Material index of element e
+%   - Delta_T        Temperature increment causing the deformation
+%   - thermal_coeff  Expansion coefficient from thermal causes
 %--------------------------------------------------------------------------
 % It must provide as output:
-%   - Fext  Global force vector [n_dof x 1]
-%            Fext(I) - Total external force acting on DOF I
+%   - Fint_0  Initial stress force vector [n_dof x 1]
+%             Fint_0(I) - Internal force acting on DOF I
 %--------------------------------------------------------------------------
 
 Fint_0 = zeros(n_dof,1);

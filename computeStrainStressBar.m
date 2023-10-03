@@ -16,7 +16,7 @@ function [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T,
 %            mat(m,2) - Section area of material m
 %   - Tmat  Material connectivities table [n_el]
 %            Tmat(e) - Material index of element e
-%   - Delta_T  Temperature increment causing the deformation
+%   - Delta_T        Temperature increment causing the deformation
 %   - thermal_coeff  Expansion coefficient from thermal causes
 %--------------------------------------------------------------------------
 % It must provide as output:
