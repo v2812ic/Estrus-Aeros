@@ -30,12 +30,12 @@ for i = 1 : n_el
     le = norm(le_vec);
 
     % Force from every element
-    F0 = mat(Tmat(i),2)*mat(Tmat(i),1)*mat(Tmat(i),3)*Delta_T;
+    F0 = -mat(Tmat(i),2)*mat(Tmat(i),1)*mat(Tmat(i),3)*Delta_T;
     F0_vec(Tn(i,2)*n_i-n_i+1:Tn(i,2)*n_i,1) = F0*le_vec/le;
     F0_vec(Tn(i,1)*n_i-n_i+1:Tn(i,1)*n_i,1) = -F0*le_vec/le;
 
     % Accumulated force
-    Fint_0 = Fint_0 + F0_vec;
+    Fint_0 = Fint_0 - F0_vec;
 end
 
 end

@@ -50,8 +50,7 @@ for i = 1 : n_el
     eps_e = (aux*uep)/le;
 
     % Find sigma
-    Ee = mat(Tmat(i),1);
-    sig_e = Ee*eps_e;
+    sig_e = mat(Tmat(i),1)*eps_e - mat(Tmat(i),1)*mat(Tmat(i),3)*Delta_T;
 
     % Store values
     eps(i) = eps_e;

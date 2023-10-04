@@ -11,12 +11,12 @@ close all;
 
 %% INPUT DATA [SI]
 
-F = 0; %[N]
+F = 800; %[N]
 Young = 7e10; %[Pa]
 Area = 1e-4; %[m^2]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
-Delta_T = 20; %[ºCelsius or Kelvin]
+Delta_T = 0; %[ºCelsius or Kelvin]
 
 %% PREPROCESS
 
