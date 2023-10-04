@@ -47,7 +47,7 @@ for i = 1 : n_el
 
     % Find epsilon
     aux = [-1 1];
-    eps_e = (aux*uep)/le + Delta_T*mat(Tmat(i), 3);
+    eps_e = (aux*uep)/le;
 
     % Find sigma
     Ee = mat(Tmat(i),1);

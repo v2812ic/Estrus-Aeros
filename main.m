@@ -11,7 +11,7 @@ close all;
 
 %% INPUT DATA [SI]
 
-F = 0.000001; %[N]
+F = 0; %[N]
 Young = 7e10; %[Pa]
 Area = 1e-4; %[m^2]
 thermal_coeff = 20e-6; %[K^-1]
@@ -32,7 +32,6 @@ x = [[0 0];
      [1.5 0.8]
     ];
  
-
 % Connectivities matrix ceation
 %  Tn(e,a) = global nodal number associated to node a of element e
 Tn = [[1 2];

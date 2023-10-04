@@ -20,5 +20,5 @@ for i = 1 : size(Fdata, 1)
     Fext(n_i*(Fdata(i, 1)-1) + Fdata(i, 2)) = Fdata(i, 3);
 end
 
-Fext = Fext - Fint_0;
+Fext = Fext + Fint_0;
 end
