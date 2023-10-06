@@ -12,8 +12,14 @@ close all;
 %% INPUT DATA [SI]
 
 F = 800; %[N]
-Young = 7e10; %[Pa]
-Area = 1e-4; %[m^2]
+g = 9.81; %[N/kg]
+D1 = 18e-3; %[m]
+d1 = 7.5e-3; %[m]
+D2 = 3e-3; %[m]
+rho1 = 3350; %[kg/m^3]
+rho2 = 950; %[kg/m^3]
+Young1 = 75e9; %[Pa]
+Young2 = 147e9; %[Pa]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
 Delta_T = 0; %[ºCelsius or Kelvin]
@@ -22,68 +28,68 @@ Delta_T = 0; %[ºCelsius or Kelvin]
 
 % Nodal coordinates matrix creation
 %  x(a,j) = coordinate of node a in the dimension j
-x = [[0 0];
-     [0.5 0.2];
-     [1 0.4];
-     [1.5 0.6];
-     [0 0.5];
-     [0.5 0.6];
-     [1 0.7];
-     [1.5 0.8]
+x = [[0.85 -0.85/2 -0.9];
+     [0.85 0.85/2 -0.9];
+     [0.85 0 0];
+     [-0.85 0 0];
+     [-0.85 -3.2 0];
+     [-0.85 3.2 0];
+     [0 0 0]
     ];
  
 % Connectivities matrix ceation
 %  Tn(e,a) = global nodal number associated to node a of element e
 Tn = [[1 2];
       [2 3];
-      [3 4];
-      [5 6];
-      [6 7];
-      [7 8];
-      [1 5];
-      [1 6];
-      [2 5];
-      [2 6];
-      [2 7];
+      [1 3];
+      [3 5];
       [3 6];
       [3 7];
-      [3 8];
+      [5 7];
+      [6 7];
+      [4 5];
+      [4 6];
       [4 7];
-      [4 8];
+      [1 4];
+      [2 4];
+      [1 7];
+      [2 7];
+      [1 5];
+      [2 6];
      ];
 
 % External force matrix creation
 %  Fdata(k,1) = node at which the force is applied
 %  Fdata(k,2) = DOF (direction) at which the force is applied
 %  Fdata(k,3) = force magnitude in the corresponding DOF
-Fdata = [[2 2 3*F];
-         [3 2 2*F];
-         [4 2 F];
+Fdata = [[1 3 -735.75];
+         [2 3 -735.75];
         ];
 
 % Fix nodes matrix creation
 %  fixNod(k,1) = node at which some DOF is prescribed
 %  fixNod(k,2) = DOF prescribed
 %  fixNod(k,3) = prescribed displacement in the corresponding DOF (0 for fixed)
-fixNod = [[1 1 0];
-          [1 2 0];
+fixNod = [[7 3 0];
+          [4 1 0];
+          [4 2 0];
+          [4 3 0];
           [5 1 0];
-          [5 2 0];
+          [5 3 0];
           ];
-      
 
 % Material data
 %  mat(m,1) = Young modulus of material m
 %  mat(m,2) = Section area of material m
 %  --more columns can be added for additional material properties--
 mat = [% Young M.   Section A.   thermal_coeff   Inertia
-         Young,   Area,      thermal_coeff,     Inertia;  % Material (1)
-];
+        [Young1, pi*(D1^2-d1^2)/4, rho1, thermal_coeff, Inertia]; % M1
+        [Young2,   pi*D2^2/4, rho2, thermal_coeff, Inertia]; % M2
+      ];
 
 % Material connectivities
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
-Tmat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
+Tmat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2];
 
 %% SOLVER
 
@@ -108,8 +114,11 @@ KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
 % Initial internal stress force
 Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
 
+% Weight computation
+Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
+
 % Global force vector assembly
-Fext = computeF(n_i,n_dof,Fdata, Fint_0);
+Fext = computeF(n_i,n_dof,Fdata, Fint_0, Fw);
 
 % Apply conditions 
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
@@ -122,14 +131,5 @@ Fext = computeF(n_i,n_dof,Fdata, Fint_0);
 
 %% POSTPROCESS
 
-% Plot displacements
-plotDisp(n_d,n,u,x,Tn,1);
-
-% Plot strains
-plotStrainStress(n_d,eps,x,Tn,{'Deformación'});
-
-% Plot stress
-plotStrainStress(n_d,sig,x,Tn,{'Tensión';'(Pa)'});
-
-% Plot stress in defomed mesh
-plotBarStressDef(x,Tn,u,sig,1)
+% Plot stress 3D
+plotBarStress3D(x,Tn,u,sig,1);

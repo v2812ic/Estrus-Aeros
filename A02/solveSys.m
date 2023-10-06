@@ -27,7 +27,8 @@ FextL = Fext(vL);
 FextR = Fext(vR);
 
 % System solver
-uL = inv(KLL)*(FextL - KLR*uR);
+% uL = inv(KLL)*(FextL - KLR*uR);
+uL = KLL\(FextL - KLR*uR);
 R = KRR*uR + KRL*uL - FextR;
 
 % Computation of displacements vector
