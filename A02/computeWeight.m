@@ -1,4 +1,4 @@
-function Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
+function Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_dof      Number of degrees of freedom
@@ -24,7 +24,6 @@ for i = 1 : n_el
     % Find the vector and length for each element
     le_vec = transpose(x(Tn(i,2),:)-x(Tn(i,1),:));
     le = norm(le_vec);
-    le
 
     % Calculate weight
     w = mat(Tmat(i),3)*mat(Tmat(i),2)*le*g;

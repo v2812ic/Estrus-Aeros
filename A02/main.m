@@ -1,10 +1,11 @@
 %-------------------------------------------------------------------------%
-% ASSIGNMENT 01
+% ASSIGNMENT 02
 %-------------------------------------------------------------------------%
 % Date: September 2023
 % Author/s: Gerard Morales Riera, Víctor Rodríguez Romero
 %
-
+% Disclaimer: This code is prepared to solve a 3D structure. It might 
+% not work for particular cases in 2D 
 clear;
 clc;
 close all;
@@ -78,6 +79,11 @@ fixNod = [[7 3 0];
           [5 3 0];
           ];
 
+%Aeronodes: nodes where aerodynamic forces (Lift, Drag) are applied
+%Tnodes: nodes where thrust is applied
+Aeronodes = [3, 4, 5, 6, 7];
+Tnodes = [1, 2];
+
 % Material data
 %  mat(m,1) = Young modulus of material m
 %  mat(m,2) = Section area of material m
@@ -118,13 +124,19 @@ Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
 Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
 
 % Global force vector assembly
-Fext = computeF(n_i,n_dof,Fdata, Fint_0, Fw);
+Fext = computeF(n_i,n_dof,Fdata);
+
+% Lift and Drag computation 
+[L, D, T] = computeLD(n, Fw, Fext, x, Aeronodes, Tnodes);
+
+% Total force computation
+Ft = computeTF(Fext, Fint_0, Fw, L, D, T, Aeronodes, Tnodes);
 
 % Apply conditions 
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 
 % System resolution
-[u,R] = solveSys(vL,vR,uR,KG,Fext);
+[u,R] = solveSys(vL,vR,uR,KG,Ft);
 
 % Compute strain and stresses
 [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T);
@@ -132,4 +144,15 @@ Fext = computeF(n_i,n_dof,Fdata, Fint_0, Fw);
 %% POSTPROCESS
 
 % Plot stress 3D
+plotBarStress3D(x,Tn,u,sig,1);
+
+%% PARTICULAR SCENARIO - B3
+
+Linc = 0.1; %percentage of lift increase
+Dinc = 0.1; %percentage of drag increase
+
+% New Thrust Tp computation
+
+% Acceleration computation
+%% POSTPROCESS B3
 plotBarStress3D(x,Tn,u,sig,1);

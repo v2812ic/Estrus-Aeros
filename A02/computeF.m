@@ -1,4 +1,4 @@
-function Fext = computeF(n_i,n_dof,Fdata, Fint_0, Fw)
+function Fext = computeF(n_i,n_dof,Fdata)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_i         Number of DOFs per node
@@ -7,8 +7,6 @@ function Fext = computeF(n_i,n_dof,Fdata, Fint_0, Fw)
 %            Fdata(k,1) - Node at which the force is applied
 %            Fdata(k,2) - DOF (direction) at which the force acts
 %            Fdata(k,3) - Force magnitude in the corresponding DOF
-%   - Fint_0
-%   - Fw: weights of the elements (bars) of the structure
 %--------------------------------------------------------------------------
 % It must provide as output:
 %   - Fext  Global force vector [n_dof x 1]
@@ -20,6 +18,4 @@ Fext = zeros(n_dof,1);
 for i = 1 : size(Fdata, 1)
     Fext(n_i*(Fdata(i, 1)-1) + Fdata(i, 2)) = Fdata(i, 3);
 end
-
-Fext = Fext + Fint_0 + Fw;
 end

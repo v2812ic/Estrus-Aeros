@@ -14,7 +14,7 @@ function KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel)
 %            KG(I,J) - Term in (I,J) position of global stiffness matrix
 %--------------------------------------------------------------------------
 
-KG = zeros(n_dof, n_dof);
+KG = zeros(n_dof);
 
 for i = 1 : n_el % iteration over the third dimension of the block Kel
     for j = 1 : n_el_dof % n_i*n_nod, iteration over the columns of Td

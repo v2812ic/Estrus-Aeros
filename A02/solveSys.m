@@ -1,4 +1,4 @@
-function [u,R] = solveSys(vL,vR,uR,KG,Fext)
+function [u,R] = solveSys(vL,vR,uR,KG,Ft)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - vL      Free degree of freedom vector
@@ -23,13 +23,13 @@ KRL = KG(vR,vL);
 KRR = KG(vR,vR);
 
 % Computation of free and restricted forces
-FextL = Fext(vL);
-FextR = Fext(vR);
+FtL = Ft(vL);
+FtR = Ft(vR);
 
 % System solver
 % uL = inv(KLL)*(FextL - KLR*uR);
-uL = KLL\(FextL - KLR*uR);
-R = KRR*uR + KRL*uL - FextR;
+uL = KLL\(FtL - KLR*uR);
+R = KRR*uR + KRL*uL - FtR;
 
 % Computation of displacements vector
 u = zeros(size(uR,1)+size(uL,1),1);
