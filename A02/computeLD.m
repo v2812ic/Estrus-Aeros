@@ -1,4 +1,4 @@
-function [L, D, T] = computeLD(n, Fw, Fext, x, Aeronodes, Tnodes)
+function [L,D,T] = computeLD(n,Fw,Fext,x,Aeronodes,Tnodes)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %  - Dimensions: n  Number of nodes

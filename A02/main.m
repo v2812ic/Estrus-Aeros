@@ -24,6 +24,7 @@ Young2 = 147e9; %[Pa]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
 Delta_T = 0; %[ºCelsius or Kelvin]
+gust = 1.1; %[non-dim. factor]
 
 %% PREPROCESS
 
@@ -66,6 +67,9 @@ Tn = [[1 2];
 Fdata = [[1 3 -735.75];
          [2 3 -735.75];
         ];
+
+% Additional mass for the passenger
+m_p = [75,75,0,0,0,0,0];
 
 % Fix nodes matrix creation
 %  fixNod(k,1) = node at which some DOF is prescribed
@@ -120,20 +124,23 @@ KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
 % Initial internal stress force
 Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
 
-% Weight computation
+% Structure's weight computation
 Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
-
-% Find and establish reference from CG
-cg = referenceFromCG(n_dof,n_el,n_i,mat,Tmat,x,Tn,g);
 
 % Global force vector assembly
 Fext = computeF(n_i,n_dof,Fdata);
 
+% Find and establish reference from CG
+cg = referenceFromCG(n,n_el,n_i,m_p,mat,Tmat,x,Tn);
+
 % Lift and Drag computation 
-[L,D,T] = computeLD(n, Fw, Fext, x, Aeronodes, Tnodes);
+[L,D,T] = computeLD(n,Fw,Fext,x,Aeronodes,Tnodes);
+
+% Gust's effects on forces
+[Lp,Dp,Tp,ax,az,Fi] = gustEffects(n,n_dof,n_el,n_i,m_p,mat,Tmat,x,cg,Tn,Aeronodes,Tnodes,g,L,D,T,Fw,Fext,gust);
 
 % Total force computation
-Ft = computeTF(Fext, Fint_0, Fw, L, D, T, Aeronodes, Tnodes);
+Ft = computeTF(Fext,Fint_0,Fw,Fi,Lp,Dp,Tp,Aeronodes,Tnodes);
 
 % Apply conditions 
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);

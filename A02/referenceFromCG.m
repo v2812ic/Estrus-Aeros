@@ -1,9 +1,9 @@
-function cg = referenceFromCG(n_dof,n_el,n_i,mat,Tmat,x,Tn,g)
+function cg = referenceFromCG(n,n_el,n_i,m_p,mat,Tmat,x,Tn)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_dof      Number of degrees of freedom
 %                  n_el       Total number of elements
-%                  n_i        Porblem's dimension
+%                  n_i        Problem's dimension
 %   - x     Nodal coordinates matrix [n x n_d]
 %            x(a,i) - Coordinates of node a in the i dimension
 %   - Tn    Nodal connectivities table [n_el x n_nod]
@@ -16,37 +16,44 @@ function cg = referenceFromCG(n_dof,n_el,n_i,mat,Tmat,x,Tn,g)
 %   - g     Gravity
 %--------------------------------------------------------------------------
 % It must provide as output:
-%   - Fw   Weight force from each bar to each node
+%   - cg    Nodal coordinates from the center of gravity
 %--------------------------------------------------------------------------
 
-Fw = zeros(n_dof,1);
-w_vec_1 = zeros(1,n_i);
-w_vec_2 = zeros(1,n_i);
-w_vec_T = zeros(1,n_i);
+m_vec_1 = zeros(1,n_i);
+m_vec_2 = zeros(1,n_i);
+m_vec_T = zeros(1,n_i);
 cg = zeros(size(x,1),size(x,2));
-w_T = 0;
+m_T = 0;
 
 for i = 1 : n_el
     % Find the vector and length for each element
     le_vec = transpose(x(Tn(i,2),:)-x(Tn(i,1),:));
     le = norm(le_vec);
 
-    % Calculate weight of the bar
-    w = mat(Tmat(i),3)*mat(Tmat(i),2)*le*g;
-    w_T = w_T + w;
+    % Calculate the meight of the bar
+    m = mat(Tmat(i),3)*mat(Tmat(i),2)*le;
+    m_T = m_T + m;
 
-    % Generate weight vector for each node and add them up
-    w_vec_1 = w/2*x(Tn(i,1),:);
-    w_vec_2 = w/2*x(Tn(i,2),:);
-    w_vec_T = w_vec_T + w_vec_1 + w_vec_2;
+    % Generate the meight vector for each node and add them up
+    m_vec_1 = m/2*x(Tn(i,1),:);
+    m_vec_2 = m/2*x(Tn(i,2),:);
+    m_vec_T = m_vec_T + m_vec_1 + m_vec_2;
 
 end
 
-w_vec_T = w_vec_T/w_T;
+for i = 1 : n
+    % Add passenger's mass
+    m_vec_T = m_vec_T + m_p(i)*x(i,:);
+
+end
+
+% Generate final vector
+m_T = m_T + sum(m_p);
+m_vec_T = m_vec_T/m_T;
 
 for i = 1 : size(cg,1)
     % Modify reference point
-    cg(i,:) = x(i,:)-w_vec_T;
+    cg(i,:) = x(i,:)-m_vec_T;
 end
 
 end

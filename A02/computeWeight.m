@@ -15,7 +15,7 @@ function Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g)
 %   - g     Gravity
 %--------------------------------------------------------------------------
 % It must provide as output:
-%   - Fw   Weight force from each bar to each node
+%   - Fw    Weight force from each bar to each node
 %--------------------------------------------------------------------------
 
 Fw = zeros(n_dof,1);
