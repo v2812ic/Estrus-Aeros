@@ -79,8 +79,8 @@ fixNod = [[7 3 0];
           [5 3 0];
           ];
 
-%Aeronodes: nodes where aerodynamic forces (Lift, Drag) are applied
-%Tnodes: nodes where thrust is applied
+% Aeronodes: nodes where aerodynamic forces (Lift, Drag) are applied
+% Tnodes: nodes where thrust is applied
 Aeronodes = [3, 4, 5, 6, 7];
 Tnodes = [1, 2];
 
@@ -89,12 +89,12 @@ Tnodes = [1, 2];
 %  mat(m,2) = Section area of material m
 %  --more columns can be added for additional material properties--
 mat = [% Young M.   Section A.   thermal_coeff   Inertia
-        [Young1, pi*(D1^2-d1^2)/4, rho1, thermal_coeff, Inertia]; % M1
-        [Young2,   pi*D2^2/4, rho2, thermal_coeff, Inertia]; % M2
+        [Young1, pi*(D1^2-d1^2)/4, rho1, thermal_coeff, D1, d1]; % M1
+        [Young2,   pi*D2^2/4, rho2, thermal_coeff, D2, 0]; % M2
       ];
 
 % Material connectivities
-%  Tmat(e) = Row in mat corresponding to the material associated to element e 
+% Tmat(e) = Row in mat corresponding to the material associated to element e 
 Tmat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2];
 
 %% SOLVER
@@ -127,7 +127,7 @@ Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
 Fext = computeF(n_i,n_dof,Fdata);
 
 % Lift and Drag computation 
-[L, D, T] = computeLD(n, Fw, Fext, x, Aeronodes, Tnodes);
+[L,D,T] = computeLD(n, Fw, Fext, x, Aeronodes, Tnodes);
 
 % Total force computation
 Ft = computeTF(Fext, Fint_0, Fw, L, D, T, Aeronodes, Tnodes);
@@ -140,6 +140,9 @@ Ft = computeTF(Fext, Fint_0, Fw, L, D, T, Aeronodes, Tnodes);
 
 % Compute strain and stresses
 [eps,sig] = computeStrainStressBar(n_d,n_el,u,Td,x,Tn,mat,Tmat,Delta_T);
+
+% Buckling analysis
+[sig_cr] = analyseBuckling(n_el,x,Tn,mat,Tmat,sig);
 
 %% POSTPROCESS
 
