@@ -123,6 +123,9 @@ Fint_0 = initialStressForce(n_dof,n_el,n_i,x,Tn,mat,Tmat,Delta_T);
 % Weight computation
 Fw = computeWeight(n_dof,n_el,mat,Tmat,x,Tn,g);
 
+% Find and establish reference from CG
+cg = referenceFromCG(n_dof,n_el,n_i,mat,Tmat,x,Tn,g);
+
 % Global force vector assembly
 Fext = computeF(n_i,n_dof,Fdata);
 
