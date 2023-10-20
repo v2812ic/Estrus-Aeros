@@ -24,7 +24,7 @@ Young2 = 147e9; %[Pa]
 thermal_coeff = 20e-6; %[K^-1]
 Inertia = 1.2e-9; %[m^4]
 Delta_T = 0; %[ºCelsius or Kelvin]
-gust = 1.1; %[non-dim. factor]
+gust = 0; %[non-dim. factor]
 
 %% PREPROCESS
 
@@ -168,4 +168,6 @@ Dinc = 0.1; %percentage of drag increase
 
 % Acceleration computation
 %% POSTPROCESS B3
-plotBarStress3D(x,Tn,u,sig,1);
+
+% Plot stress 3D
+plotBarStress3D(x,Tn,u,sig,10);

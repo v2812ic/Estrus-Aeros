@@ -37,7 +37,7 @@ if gust == 0
 
 else
     % Say there is gust
-    fprintf('Gust of is present. Not in steady flight.\n');
+    fprintf('Gust is present. Not in steady flight.\n');
 
     % Adjust aerodynamic loads
     Lp = gust*L;
