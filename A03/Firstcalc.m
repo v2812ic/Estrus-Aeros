@@ -15,7 +15,7 @@ function [A, Izz, C, lp] = Firstcalc(t1, t2, h1, h2, b, Me, g, eqmass1, mxlim1, 
 ld = sqrt(b^2 + (h1-h2)^2/4); % longitude of the diagonal beam
 
 A = t2*(h1+h2) + 2*t1*ld;
-cent = (t2*h2*b + b*t1*ld)/A;
+C = (t2*h2*b + b*t1*ld)/A;
 
 beta = atan((h1-h2)/(2*b)); % angle of slope of the diagonal beam
 yd = (h1+h2)/4; % gc y-coordinate of the diagonal beam [m]

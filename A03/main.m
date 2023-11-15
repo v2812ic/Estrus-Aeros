@@ -42,6 +42,7 @@ lxlim2 = [L1, L];
 
 % Number of elements for each part
 nel = [3, 6, 12, 24, 48, 96];
+Nel = 96; 
 
 %% PRECOMPUTATIONS
 
@@ -49,7 +50,7 @@ nel = [3, 6, 12, 24, 48, 96];
 [A, Izz, C, lp] = Firstcalc(t1, t2, h1, h2, b, Me, g, eqmass1, mxlim1, eqmass2, mxlim2, eqlift1, lxlim1, eqlift2, lxlim2);
 
 % Plot analytical solution
-% fig = plotBeamsInitialize(L);
+fig = plotBeamsInitialize(L);
 
 % Loop through each of the divisions
 for k = 1:length(nel)
@@ -63,11 +64,23 @@ for k = 1:length(nel)
     n_k = nel(k);
     x = linspace(0, L, n_k+1);
     
-    % Nodal connectivities // This vectors differs from the original alg.
-    %  Tnod(e,a) = Coordinate (x) associated to node a of element e
+    % Nodal / DOF connectivities
+    % Nodal coordinate vector
     Tnod = zeros(n_k, 2);
     Tnod(:, 1) = x(1, 1:(length(x)-1));
     Tnod(:, 2) = x(1, 2:length(x));
+    
+    % Nodal connectivity vector
+    Tn = zeros(n_k, 2);
+    Tn(:, 1) = [1 : n_k];
+    Tn(:, 2) = Tn(:, 1) + 1;
+    
+    % DOF connectivity vector
+    Td = zeros(n_k, 4);
+    Td(:, 1) = [1 : 2 : 2*n_k];
+    Td(:, 2) = Td(:, 1) + 1;
+    Td(:, 3) = Td(:, 1) + 2;
+    Td(:, 4) = Td(:, 1) + 3;
     
     % Material properties matrix
     %  mat(m,1) = Young modulus of material m
@@ -83,18 +96,19 @@ for k = 1:length(nel)
        
     %% SOLVER
     
-    % Computation of element stiffness matrices
+    % Computation of Element Stiffness Matrices
     Kel = computeKelBar(n_k, Tnod, mat, Tmat);
     
-    % Computation of the element force vector
-    Fel = computeForce(Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1);
+    % Computation of the Element Force Vector
+    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1);
    
-    % Global Stiffness matrix
-    
-    % Force vector assembly
+    % Global Stiffness Matrix & Force Vector
+    [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel);
     
     % Compute:
     % u  - Displacements and rotations vector [ndof x 1]
+    [u, R] = solveSys(n_k, KG, Fext);
+     
     % pu - Polynomial coefficients for displacements for each element [nel x 4]
     % pt - Polynomial coefficients for rotations for each element [nel x 3]
     % Fy - Internal shear force at each elements's nodes [nel x nne]
