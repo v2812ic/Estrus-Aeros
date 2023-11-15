@@ -100,7 +100,7 @@ for k = 1:length(nel)
     Kel = computeKelBar(n_k, Tnod, mat, Tmat);
     
     % Computation of the Element Force Vector
-    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1);
+    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1, Me, g);
    
     % Global Stiffness Matrix & Force Vector
     [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel);
