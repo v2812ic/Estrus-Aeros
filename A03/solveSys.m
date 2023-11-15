@@ -6,7 +6,7 @@ function [u, R] = solveSys(n_k, KG, Fext)
 vR = [1, 2];
 uR = [0, 0];
 
-v_ndof = 1:(2*n_k + 1);
+v_ndof = 1:(2*(n_k + 1));
 vL = setdiff(v_ndof, vR);
 
 % Shorter matrices creation

@@ -1,6 +1,6 @@
 function [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel)
 
-Fext = zeros(2*(n_k+1), 1);
+Fext = zeros(2*(n_k + 1), 1);
 KG = zeros(2*(n_k + 1));
 
 for i = 1 : n_k
