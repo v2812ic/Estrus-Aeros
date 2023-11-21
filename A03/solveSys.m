@@ -28,5 +28,4 @@ u = zeros(size(uR,1)+size(uL,1),1);
 u(vL) = uL;
 u(vR) = uR;
 
-
 end

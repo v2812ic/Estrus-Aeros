@@ -11,8 +11,7 @@ for i = 1 : n_k
         % fuerza del motor, considerando que solo puede caer sobre un nodo,
         % no sobre una viga general
         if I == dofmot
-            Fext(I) = Fext(I) - Me*g/2;   
-            fprintf('hola concha');
+            Fext(I) = Fext(I) - Me*g/2;
         end
         Fext(I) = Fext(I) + Fel(j, i);
         for k = 1 : 4 

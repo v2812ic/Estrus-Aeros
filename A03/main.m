@@ -50,13 +50,16 @@ Nel = 96;
 [A, Izz, C, lp] = Firstcalc(t1, t2, h1, h2, b, Me, g, eqmass1, mxlim1, eqmass2, mxlim2, eqlift1, lxlim1, eqlift2, lxlim2);
 
 % Plot analytical solution
-%fig = plotBeamsInitialize(L);
+fig = plotBeamsInitialize(L);
 
 % Loop through each of the divisions
 for k = 1:length(nel)
 
     %% PREPROCESS
     
+    % Dimensions of the problem
+    n_i = 2;
+
     % Nodal coordinates
     % x(a,j) = coordinate of node a in the dimension j (there's only one
     % dimension)
@@ -108,30 +111,26 @@ for k = 1:length(nel)
     % Compute:
     % u  - Displacements and rotations vector [ndof x 1]
     [u, R] = solveSys(n_k, KG, Fext);
-    uaux = 2*(1:n_k+1)-1;
-    plot(x, u(uaux));
-    legend;
-    axis equal
-    hold on;
-     
-    % pu - Polynomial coefficients for displacements for each element [nel x 4]
-    pu = findDisplacementCoefficients();
 
-    % pt - Polynomial coefficients for rotations for each element [nel x 3]
-%     pt = findRotationCoefficients();
+%     uaux = 2*(1:n_k+1)-1;
+%     plot(x, u(uaux));
+%     legend;
+%     axis equal
+%     hold on;
 
-    % Fy - Internal shear force at each elements's nodes [nel x nne]
-%     Fy = findInternalShear();
-
-    % Mz - Internal bending moment at each elements's nodes [nel x nne]
-%     Mz = findInternalBending();
+    % Find the following coefficients and loads:
+        % pu: Polynomial coefficients for displacements for each element [nel x 4]
+        % pt: Polynomial coefficients for rotations for each element [nel x 3]
+        % Fy: Internal shear force at each elements's nodes [nel x nne]
+        % Mz: Internal bending moment at each elements's nodes [nel x nne]
+    [pu,pt,Fy,Mz] = findProperties(n_i,n_k,Td,Tnod,Kel,u);
     
     %% POSTPROCESS
     
     % Number of subdivisions and plots
-%     nsub = Nel/nel(k);
-%     plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
-%     drawnow;
+    nsub = Nel/nel(k);
+    plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
+    drawnow;
     
 end
 
