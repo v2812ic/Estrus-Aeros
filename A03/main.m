@@ -110,9 +110,16 @@ for k = 1:length(nel)
     [u, R] = solveSys(n_k, KG, Fext);
      
     % pu - Polynomial coefficients for displacements for each element [nel x 4]
+    pu = findDisplacementCoefficients();
+
     % pt - Polynomial coefficients for rotations for each element [nel x 3]
+%     pt = findRotationCoefficients();
+
     % Fy - Internal shear force at each elements's nodes [nel x nne]
+%     Fy = findInternalShear();
+
     % Mz - Internal bending moment at each elements's nodes [nel x nne]
+%     Mz = findInternalBending();
     
     %% POSTPROCESS
     
