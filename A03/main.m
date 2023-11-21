@@ -41,7 +41,7 @@ eqlift2 = l*(1-(x-L1)/L2)*(1+(x-L1)/L2);
 lxlim2 = [L1, L];
 
 % Number of elements for each part
-nel = [3, 6, 12, 24, 48, 96];
+nel = [3, 6, 12, 24, 48, 96, 150, 180];
 Nel = 96; 
 
 %% PRECOMPUTATIONS
@@ -50,7 +50,7 @@ Nel = 96;
 [A, Izz, C, lp] = Firstcalc(t1, t2, h1, h2, b, Me, g, eqmass1, mxlim1, eqmass2, mxlim2, eqlift1, lxlim1, eqlift2, lxlim2);
 
 % Plot analytical solution
-fig = plotBeamsInitialize(L);
+%fig = plotBeamsInitialize(L);
 
 % Loop through each of the divisions
 for k = 1:length(nel)
@@ -100,14 +100,19 @@ for k = 1:length(nel)
     Kel = computeKelBar(n_k, Tnod, mat, Tmat);
     
     % Computation of the Element Force Vector
-    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1, Me, g);
+    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1);
    
     % Global Stiffness Matrix & Force Vector
-    [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel);
+    [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel, Me, g, nel(k), L1, L);
     
     % Compute:
     % u  - Displacements and rotations vector [ndof x 1]
     [u, R] = solveSys(n_k, KG, Fext);
+    uaux = 2*(1:n_k+1)-1;
+    plot(x, u(uaux));
+    legend;
+    axis equal
+    hold on;
      
     % pu - Polynomial coefficients for displacements for each element [nel x 4]
     % pt - Polynomial coefficients for rotations for each element [nel x 3]
@@ -117,12 +122,12 @@ for k = 1:length(nel)
     %% POSTPROCESS
     
     % Number of subdivisions and plots
-    nsub = Nel/nel(k);
-    plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
-    drawnow;
+%     nsub = Nel/nel(k);
+%     plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
+%     drawnow;
     
 end
 
 % Add figure legends
-figure(fig)
-legend(strcat('N=',cellstr(string(nel))),'location','northeast');
+% figure(fig)
+% legend(strcat('N=',cellstr(string(nel))),'location','northeast');
