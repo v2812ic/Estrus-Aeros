@@ -10,7 +10,7 @@ close all;
 %% INPUT DATA
 
 % Material properties
-E = 85e9; % 85GPa
+E = 69e9; % 85GPa
 % Cross-section parameters [m]
 t1 = 1.5e-3;
 t2 = 4e-3;
@@ -22,8 +22,8 @@ g = 9.81;
 L1 = 5;
 L2 = 10;
 L = L1+L2;
-Me = 2550;
-M = 35e3;
+Me = 2360;
+M = 32e3;
 
 % Distribution of mass and lift plus limits
 syms x l 
@@ -48,6 +48,10 @@ Nel = 96;
 
 %First calculations: 
 [A, Izz, C, lp] = Firstcalc(t1, t2, h1, h2, b, Me, g, eqmass1, mxlim1, eqmass2, mxlim2, eqlift1, lxlim1, eqlift2, lxlim2);
+
+A = 15600;
+C = 0;
+Izz = 2.14e-3;
 
 % Plot analytical solution
 fig = plotBeamsInitialize(L);

@@ -41,6 +41,4 @@ plot(xel(:),Fy_el(:));
 subplot(2,2,4)
 plot(xel(:),Mz_el(:));
 
-legend(string(k));
-
 end
