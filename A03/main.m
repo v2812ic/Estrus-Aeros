@@ -42,7 +42,7 @@ lxlim2 = [L1, L];
 
 % Number of elements for each part
 nel = [3, 6, 12, 24, 48, 96];
-Nel = 96; 
+Nel = nel(length(nel)); 
 
 %% PRECOMPUTATIONS
 
@@ -103,7 +103,7 @@ for k = 1:length(nel)
     Kel = computeKelBar(n_k, Tnod, mat, Tmat);
     
     % Computation of the Element Force Vector
-    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1);
+    Fel = computeForce(n_k, Tnod, eqmass1, eqmass2, eqlift1, eqlift2, lp, L1, g);
    
     % Global Stiffness Matrix & Force Vector
     [Fext, KG] = GeneralAssembly(n_k, Td, Kel, Fel, Me, g, nel(k), L1, L);
