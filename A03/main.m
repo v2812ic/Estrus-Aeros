@@ -112,12 +112,6 @@ for k = 1:length(nel)
     % u  - Displacements and rotations vector [ndof x 1]
     [u, R] = solveSys(n_k, KG, Fext);
 
-%     uaux = 2*(1:n_k+1)-1;
-%     plot(x, u(uaux));
-%     legend;
-%     axis equal
-%     hold on;
-
     % Find the following coefficients and loads:
         % pu: Polynomial coefficients for displacements for each element [nel x 4]
         % pt: Polynomial coefficients for rotations for each element [nel x 3]
@@ -129,7 +123,7 @@ for k = 1:length(nel)
     
     % Number of subdivisions and plots
     nsub = Nel/nel(k);
-    plotBeams1D(fig,x,Tn,nsub,pu,pt,Fy,Mz,k)
+    plotBeams1D(fig,x,Tn,nsub,pu,pt,Fy,Mz)
     drawnow;
     
 end

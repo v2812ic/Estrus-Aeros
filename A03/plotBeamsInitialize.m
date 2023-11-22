@@ -21,7 +21,7 @@ box on
 xlim([0,L]);
 xlabel('x (m)');
 ylabel('U_y (m)');
-title('Deflection');
+title('Deflexión');
 % Plot beam section rotation
 subplot(2,2,2)
 if nargin > 1
@@ -32,7 +32,7 @@ box on
 xlim([0,L]);
 xlabel('x (m)');
 ylabel('\theta_z (rad)');
-title('Rotation');
+title('Rotación');
 % Plot beam internal shear force
 subplot(2,2,3)
 if nargin > 1
@@ -43,7 +43,7 @@ box on
 xlim([0,L]);
 xlabel('x (m)');
 ylabel('F_y (N)');
-title('Shear force');
+title('Esfuerzo cortante');
 % Plot beam internal bending moment
 subplot(2,2,4)
 if nargin > 1
@@ -54,6 +54,6 @@ box on
 xlim([0,L]);
 xlabel('x (m)');
 ylabel('M_z (N·m)');
-title('Bending moment');
+title('Momento flector');
 
 end

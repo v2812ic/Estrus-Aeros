@@ -1,4 +1,4 @@
-function plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz,k)
+function plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
 % PLOTBEAMS1D - Plot displacements, rotations, shear force and bending
 % moment for 1D beam
 % Inputs:
@@ -40,5 +40,15 @@ plot(xel(:),Fy_el(:));
 % Plot beam internal bending moment
 subplot(2,2,4)
 plot(xel(:),Mz_el(:));
+
+% Printing values
+formatSpec = 'Deflexión de la punta para N=%2.f: %4.4f';
+fprintf(formatSpec,nel,u_el(size(u_el,1)*size(u_el,2)));
+fprintf('\n');
+
+formatSpec = 'Rotación de la punta para N=%2.f: %4.4f';
+fprintf(formatSpec,nel,theta_el(size(theta_el,1)*size(theta_el,2)));
+fprintf('\n');
+fprintf('\n');
 
 end
