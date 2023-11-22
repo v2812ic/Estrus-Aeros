@@ -1,4 +1,4 @@
-function plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
+function plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz,k)
 % PLOTBEAMS1D - Plot displacements, rotations, shear force and bending
 % moment for 1D beam
 % Inputs:
@@ -40,5 +40,7 @@ plot(xel(:),Fy_el(:));
 % Plot beam internal bending moment
 subplot(2,2,4)
 plot(xel(:),Mz_el(:));
+
+legend(string(k));
 
 end

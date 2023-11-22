@@ -41,7 +41,7 @@ eqlift2 = l*(1-(x-L1)/L2)*(1+(x-L1)/L2);
 lxlim2 = [L1, L];
 
 % Number of elements for each part
-nel = [3, 6, 12, 24, 48, 96, 150, 180];
+nel = [3, 6, 12, 24, 48, 96];
 Nel = 96; 
 
 %% PRECOMPUTATIONS
@@ -129,7 +129,7 @@ for k = 1:length(nel)
     
     % Number of subdivisions and plots
     nsub = Nel/nel(k);
-    plotBeams1D(fig,x,Tnod,nsub,pu,pt,Fy,Mz)
+    plotBeams1D(fig,x,Tn,nsub,pu,pt,Fy,Mz,k)
     drawnow;
     
 end
