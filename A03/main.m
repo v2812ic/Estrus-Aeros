@@ -5,6 +5,7 @@
 % Author/s: Morales G. // Rodríguez V.
 
 clear;
+clc;
 close all;
 
 %% INPUT DATA
@@ -41,7 +42,7 @@ eqlift2 = l*(1-(x-L1)/L2)*(1+(x-L1)/L2);
 lxlim2 = [L1, L];
 
 % Number of elements for each part
-nel = [3, 6, 12, 24, 48, 96];
+nel = [96];
 Nel = nel(length(nel)); 
 
 %% PRECOMPUTATIONS
@@ -127,6 +128,9 @@ for k = 1:length(nel)
     drawnow;
     
 end
+
+% Look for the most solicitated position with the latest data
+xc = mostSolicitatedPosition(t1,t2,b,L1,L2,h1,h2,C,Nel,Izz,Fy,Mz);
 
 % Add figure legends
 figure(fig)

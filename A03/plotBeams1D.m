@@ -49,6 +49,10 @@ fprintf('\n');
 formatSpec = 'Rotación de la punta para N=%2.f: %4.4f';
 fprintf(formatSpec,nel,theta_el(size(theta_el,1)*size(theta_el,2)));
 fprintf('\n');
+
+formatSpec = 'Rotación en grados N=%2.f: %4.4f';
+fprintf(formatSpec,nel,theta_el(size(theta_el,1)*size(theta_el,2))*360/(2*pi));
+fprintf('\n');
 fprintf('\n');
 
 end
