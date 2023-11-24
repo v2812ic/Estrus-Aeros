@@ -36,7 +36,7 @@ syms s;
 for i = 1 : Nel
     i
     % Find the normal stress due to Mz
-    sig_max = -(Mz(i,1)*ymax)/Izz
+    sig_max = -(Mz(i,1)*ymax)/Izz;
 
     % Find the shear stress due to Fy
     qo_1(s) = -(Fy(i,1))/Izz*g1(s);
